@@ -20,6 +20,15 @@ from auth.token_report import router as token_router
 from auth.sso import SSO_AUTO_LOGIN_JS, LOGIN_BUTTON_JS
 from auth.config import AGENTPIT_LOGIN_BUTTON_NAME
 
+# ── Evolvr 用户反馈 Widget ──
+EVOLVR_FEEDBACK_JS = """
+<script
+  src="https://evolvr.agentpit.io/widget/feedback-widget.js"
+  data-api="https://evolvr.agentpit.io/api/feedback"
+  data-app-id="858f129e-5872-4e44-93c8-0c13ac158317"
+  async>
+</script>
+"""
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='argparse testing')
@@ -171,7 +180,7 @@ if __name__ == "__main__":
     
     # gradio interface
     theme = gr.Theme.load("funclip/utils/theme.json")
-    with gr.Blocks(theme=theme, head=SSO_AUTO_LOGIN_JS + LOGIN_BUTTON_JS) as funclip_service:
+    with gr.Blocks(theme=theme, head=SSO_AUTO_LOGIN_JS + LOGIN_BUTTON_JS + EVOLVR_FEEDBACK_JS) as funclip_service:
         gr.Markdown(top_md_1)
         # AgentPit login button
         gr.HTML(f"""
