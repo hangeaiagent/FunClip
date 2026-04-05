@@ -4,6 +4,4 @@
 ClipVideo/clipvideo/output
 *__pycache__
 *.spec
-.agentpit/
-.specstory/
 .vscode/

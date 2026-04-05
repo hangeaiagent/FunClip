@@ -1,0 +1,31 @@
+{
+  "version": "1.0",
+  "stage": "ready",
+  "features": [
+    {
+      "name": "agentpit-sso",
+      "description": "SSO 自动单点登录，用户在主站已登录时访问子应用自动完成静默登录",
+      "generated_files": [
+        "funclip/auth/__init__.py",
+        "funclip/auth/config.py",
+        "funclip/auth/oauth.py",
+        "funclip/auth/sso.py",
+        "funclip/launch.py（已更新）"
+      ]
+    },
+    {
+      "name": "agentpit-tokens",
+      "description": "Token 消耗上报接口，供外部开发者的 Agent 应用回传 token 消耗数据",
+      "generated_files": [
+        "funclip/auth/models.py",
+        "funclip/auth/token_report.py",
+        "funclip/launch.py（已更新）"
+      ]
+    }
+  ],
+  "config": {
+    "client_id": "cmnkgi132002o60t9pk3zpt8r",
+    "redirect_uri": "https://funclip.agentpit.io/api/auth/agentpit/callback",
+    "login_button_name": "agentpit 授权登陆"
+  }
+}
