@@ -12,3 +12,7 @@ openai
 g4f
 dashscope
 curl_cffi
+httpx
+PyJWT
+sqlalchemy
+uvicorn

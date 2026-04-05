@@ -15,6 +15,10 @@ from llm.qwen_api import call_qwen_model
 from llm.g4f_openai_api import g4f_openai_call
 from utils.trans_utils import extract_timestamps
 from introduction import top_md_1, top_md_3, top_md_4
+from auth.oauth import router as oauth_router
+from auth.token_report import router as token_router
+from auth.sso import SSO_AUTO_LOGIN_JS, LOGIN_BUTTON_JS
+from auth.config import AGENTPIT_LOGIN_BUTTON_NAME
 
 
 if __name__ == "__main__":
@@ -167,8 +171,18 @@ if __name__ == "__main__":
     
     # gradio interface
     theme = gr.Theme.load("funclip/utils/theme.json")
-    with gr.Blocks(theme=theme) as funclip_service:
+    with gr.Blocks(theme=theme, head=SSO_AUTO_LOGIN_JS + LOGIN_BUTTON_JS) as funclip_service:
         gr.Markdown(top_md_1)
+        # AgentPit login button
+        gr.HTML(f"""
+        <div style="text-align:right;padding:5px 15px;">
+            <button onclick="agentpitLogin()"
+                    style="padding:8px 20px;background:#4F46E5;color:white;border:none;
+                           border-radius:6px;cursor:pointer;font-size:14px;">
+                {AGENTPIT_LOGIN_BUTTON_NAME}
+            </button>
+        </div>
+        """)
         # gr.Markdown(top_md_2)
         gr.Markdown(top_md_3)
         gr.Markdown(top_md_4)
@@ -305,8 +319,17 @@ if __name__ == "__main__":
                                    ],
                            outputs=[video_output, audio_output, clip_message, srt_clipped])
     
+    # Mount OAuth and token reporting routes onto Gradio's FastAPI app
+    import fastapi
+    app = fastapi.FastAPI()
+    app.include_router(oauth_router)
+    app.include_router(token_router)
+    app = gr.mount_gradio_app(app, funclip_service, path="/")
+
     # start gradio service in local or share
     if args.listen:
-        funclip_service.launch(share=args.share, server_port=args.port, server_name=server_name, inbrowser=False)
+        import uvicorn
+        uvicorn.run(app, host=server_name, port=args.port)
     else:
-        funclip_service.launch(share=args.share, server_port=args.port, server_name=server_name)
+        import uvicorn
+        uvicorn.run(app, host=server_name, port=args.port)
